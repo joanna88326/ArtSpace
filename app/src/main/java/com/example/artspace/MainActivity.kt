@@ -26,6 +26,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +38,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.artspace.data.DataSource
+import com.example.artspace.model.Artwork
 import com.example.artspace.ui.theme.ArtSpaceTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,7 +47,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ArtSpaceTheme {
-                ArtSpaceLayout()
+                ArtSpaceApp()
             }
         }
     }
@@ -49,7 +55,22 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun ArtSpaceLayout() {
+private fun ArtSpaceApp() {
+    val artworks = DataSource().artworks
+    var currentIndex by remember { mutableStateOf<Int>(0) }
+    ArtSpaceLayout(
+        artwork = artworks[currentIndex],
+        onPreviousClick = { /*TODO*/ },
+        onNextClick = { /*TODO*/ }
+    )
+}
+
+@Composable
+private fun ArtSpaceLayout(
+    artwork: Artwork,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,9 +79,13 @@ private fun ArtSpaceLayout() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ArtworkPicture(R.drawable.ic_launcher_background)
+        ArtworkPicture(artwork.imageResId)
         Spacer(modifier = Modifier.height(24.dp))
-        ArtworkInfo()
+        ArtworkInfo(
+            artwork.title,
+            artwork.artist,
+            artwork.year
+        )
         Spacer(modifier = Modifier.height(24.dp))
         Box(
             modifier = Modifier
@@ -70,8 +95,8 @@ private fun ArtSpaceLayout() {
             contentAlignment = Alignment.BottomCenter
         ) {
             NavigationButtons(
-                onPreviousClick = { /*TODO*/ },
-                onNextClick = { /*TODO*/ },
+                onPreviousClick = onPreviousClick,
+                onNextClick = onNextClick,
             )
         }
     }
@@ -102,7 +127,12 @@ private fun ArtworkPicture(
 }
 
 @Composable
-private fun ArtworkInfo(modifier: Modifier = Modifier) {
+private fun ArtworkInfo(
+    title: String,
+    artist: String,
+    year: String,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .width(240.dp)
@@ -115,11 +145,11 @@ private fun ArtworkInfo(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Artwork Title",
+                text = title,
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "Artwork Artist(year)",
+                text = "$artist($year)",
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -164,6 +194,6 @@ private fun NavigationButtons(
 @Composable
 fun ArtSpacePreview() {
     ArtSpaceTheme {
-        ArtSpaceLayout()
+        ArtSpaceApp()
     }
 }
