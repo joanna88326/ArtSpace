@@ -60,8 +60,10 @@ private fun ArtSpaceApp() {
     var currentIndex by remember { mutableStateOf<Int>(0) }
     ArtSpaceLayout(
         artwork = artworks[currentIndex],
-        onPreviousClick = { /*TODO*/ },
-        onNextClick = { /*TODO*/ }
+        onPreviousClick = { currentIndex-- },
+        onNextClick = { currentIndex++ },
+        isPreviousEnabled = currentIndex != 0,
+        isNextEnabled = currentIndex != artworks.lastIndex
     )
 }
 
@@ -69,7 +71,9 @@ private fun ArtSpaceApp() {
 private fun ArtSpaceLayout(
     artwork: Artwork,
     onPreviousClick: () -> Unit,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    isPreviousEnabled: Boolean,
+    isNextEnabled: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -97,6 +101,8 @@ private fun ArtSpaceLayout(
             NavigationButtons(
                 onPreviousClick = onPreviousClick,
                 onNextClick = onNextClick,
+                isPreviousEnabled = isPreviousEnabled,
+                isNextEnabled = isNextEnabled
             )
         }
     }
@@ -160,6 +166,8 @@ private fun ArtworkInfo(
 private fun NavigationButtons(
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
+    isPreviousEnabled: Boolean,
+    isNextEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -171,7 +179,8 @@ private fun NavigationButtons(
     ) {
         Button(
             onClick = onPreviousClick,
-            modifier = Modifier.width(140.dp)
+            modifier = Modifier.width(140.dp),
+            enabled = isPreviousEnabled
         ) {
             Text(
                 text = "Previous",
@@ -180,7 +189,8 @@ private fun NavigationButtons(
         }
         Button(
             onClick = onNextClick,
-            modifier = Modifier.width(140.dp)
+            modifier = Modifier.width(140.dp),
+            enabled = isNextEnabled
         ) {
             Text(
                 text = "Next",
