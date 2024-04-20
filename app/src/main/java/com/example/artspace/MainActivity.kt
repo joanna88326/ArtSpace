@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ArtSpaceLayout() {
+private fun ArtSpaceLayout() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +78,7 @@ fun ArtSpaceLayout() {
 }
 
 @Composable
-fun ArtworkPicture(
+private fun ArtworkPicture(
     painterResId: Int,
     modifier: Modifier = Modifier
 ) {
@@ -102,7 +102,7 @@ fun ArtworkPicture(
 }
 
 @Composable
-fun ArtworkInfo(modifier: Modifier = Modifier) {
+private fun ArtworkInfo(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .width(240.dp)
@@ -127,7 +127,7 @@ fun ArtworkInfo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun NavigationButtons(
+private fun NavigationButtons(
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
